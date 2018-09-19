@@ -1,0 +1,19 @@
+---
+title: "HW3"
+author: "Qi Qi"
+date: "9/20/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+\begin{itemize}
+\item
+$$f(x_i;\theta)=\frac{1}{\pi [1+(x_i-\theta)^2]}$$
+$$\ell=\sum_{i=1}^{n}logf(X_i;\theta)=\sum_{i=1}^{n}-log(\pi[1+(X_i-\theta)^2])=-nlog\pi-\sum_{i=1}^{n}log[1+(X_i-\theta)^2]$$
+$$\ell'=\frac{\partial \ell}{\partial \theta}=-\sum_{i=1}^{n}\frac{2\theta-2X_i}{1+(X_i-\theta)^2}=-2\sum_{i=1}^{n}\frac{\theta-X_i}{1+(X_i-\theta)^2}$$
+$$\ell''=\frac{\partial \ell'}{\partial \theta}=-2\sum_{i=1}^{n}\frac{1+(X_i-\theta)^2-2(\theta-X_i)^2}{[1+(X_i-\theta)^2]^2}=-2\sum_{i=1}^{n}\frac{1-(X_i-\theta)^2}{[1+(X_i-\theta)^2]^2}$$
+
+\end{itemize}
