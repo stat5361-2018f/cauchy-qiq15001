@@ -29,15 +29,61 @@ $$=\frac{4n}{\pi}\int_0^1y^{1/2}(1-y)^{1/2}dy=\frac{4n}{\pi}\frac{\Gamma(3/2)\Ga
 
 Loglikelihood function and plot:
 
-
 ```{r}
 set.seed(20180909)
-n<- 10
+
+loglik <- function(theta,x) sum(-log(pi) - log(1 + (x - theta)^2))
 theta<- 5
-x<- rcauchy(n, 5, 1)
-loglik<- -n * log(pi) - sum(log(1 + (x-theta)^2))
-plot(theta, loglik)
+x<- rcauchy(10, 5, 1)
+plot(theta,sapply(theta,loglik,x),ylab="LogL of Cauchy")
 ```
 
 3.
+
+Iteration:
+```{r echo=T, results='hide'}
+g <- function(theta) sum(2 * (x - theta)/(1 + (x - theta)^2))
+dg <- function(theta) sum((2 * (x - theta)^2 - 2)/(1 + (x - theta)^2)^2)
+newton<- function(fun, dfun, x0, eps, nlim){
+  t<- 0
+  repeat{
+    t<- t+1
+    if(t> nlim){
+      cat("Iteration Limit Exceeded: current=", t, fill=T)
+      x1<- NA
+      break
+    }
+    x1<- x0-fun(x0)/dfun(x0)
+    if (abs(x1 - x0)< eps||fun(x1)<1.0e-12){
+      break
+      x0<- x1
+      cat("Iteration number=",t, "Current interate=",x1, fill = T)
+    }
+  }
+  return(x1)
+}
+
+initial<- -10
+mle<- newton(g, dg, initial, .00001 , 1000)
+for (i in 2:61){
+  initial[i]<- initial[i-1]+.5
+   mle[i]<- newton(g, dg, initial[i], .00001 , 1000)
+}
+```
+
+
+
+```{r echo=FALSE}
+dat<- na.omit(cbind(initial, mle))
+c1<- dat[1:9, 1]
+c2<- dat[1:9, 2]
+c3<- dat[10:18, 1]
+c4<- dat[10:18, 2]
+c5<- dat[19:27, 1]
+c6<- dat[19:27, 2]
+knitr::kable(cbind(c1,c2,c3,c4,c5,c6), caption = "MLE of Cauchy by Newton–Raphson method", col.names=c("Initial", "MLE","Initial", "MLE","Initial", "MLE"))
+```
+
+Table 1 is the MLE not exceeding iteration number. We can see the iteration returns very different results with different initial values.
+
 
