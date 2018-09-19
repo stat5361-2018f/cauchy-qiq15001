@@ -17,9 +17,9 @@ $$\ell'=\frac{\partial \ell}{\partial \theta}=-\sum_{i=1}^{n}\frac{2\theta-2X_i}
 $$\ell''=\frac{\partial \ell'}{\partial \theta}=-2\sum_{i=1}^{n}\frac{1+(X_i-\theta)^2-2(\theta-X_i)^2}{[1+(X_i-\theta)^2]^2}=-2\sum_{i=1}^{n}\frac{1-(X_i-\theta)^2}{[1+(X_i-\theta)^2]^2}$$
 $$I_{n}(\theta)=nE[(\frac{\partial logf(x;\theta)}{\partial \theta})^2]=nE[\frac{4(X-\theta)^2}{[1+(X-\theta)^2]^2}]=4n\int_R\frac{(x-\theta)^2}{[1+(x-\theta)^2]^2}\frac{1}{\pi [1+(x-\theta)^2]}dx$$
 $$=4n\int_R\frac{x^2}{[1+x^2]^2}\frac{1}{\pi [1+x^2]}dx=\frac{4n}{\pi}\int_R\frac
-{x^2}{(1+x^2)^3}dx=\frac{2}{\pi}[\int_R\frac{2}{(1+x^2)^3}dx-\int_R\frac{1}{(1+x^2)^2}dx]$$
+{x^2}{(1+x^2)^3}dx$$
 
-Let $K_n=\int_R\frac{1}{(1+x^2)^n}dx$, then $$K_n=\int_R\frac{1+x^2}{(1+x^2)^{n+1}}dx=\int_R\frac{1+x^2}{(1+x^2)^{n+1}}dx=K_{n+1}+$$
+
 
 
 \end{itemize}
