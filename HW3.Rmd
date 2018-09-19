@@ -9,17 +9,35 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-\begin{itemize}
-\item
+
+1.
+
 $$f(x_i;\theta)=\frac{1}{\pi [1+(x_i-\theta)^2]}$$
 $$\ell=\sum_{i=1}^{n}logf(X_i;\theta)=\sum_{i=1}^{n}-log(\pi[1+(X_i-\theta)^2])=-nlog\pi-\sum_{i=1}^{n}log[1+(X_i-\theta)^2]$$
 $$\ell'=\frac{\partial \ell}{\partial \theta}=-\sum_{i=1}^{n}\frac{2\theta-2X_i}{1+(X_i-\theta)^2}=-2\sum_{i=1}^{n}\frac{\theta-X_i}{1+(X_i-\theta)^2}$$
 $$\ell''=\frac{\partial \ell'}{\partial \theta}=-2\sum_{i=1}^{n}\frac{1+(X_i-\theta)^2-2(\theta-X_i)^2}{[1+(X_i-\theta)^2]^2}=-2\sum_{i=1}^{n}\frac{1-(X_i-\theta)^2}{[1+(X_i-\theta)^2]^2}$$
 $$I_{n}(\theta)=nE[(\frac{\partial logf(x;\theta)}{\partial \theta})^2]=nE[\frac{4(X-\theta)^2}{[1+(X-\theta)^2]^2}]=4n\int_R\frac{(x-\theta)^2}{[1+(x-\theta)^2]^2}\frac{1}{\pi [1+(x-\theta)^2]}dx$$
 $$=4n\int_R\frac{x^2}{[1+x^2]^2}\frac{1}{\pi [1+x^2]}dx=\frac{4n}{\pi}\int_R\frac
+{x^2}{(1+x^2)^3}dx=\frac{8n}{\pi}\int_0^{\infty}\frac
 {x^2}{(1+x^2)^3}dx$$
 
+Let $y=\frac{1}{1+x^2}$, then $x=(\frac{1}{y}-1)^{1/2}$, $dx=-\frac{1}{2}(\frac{1}{y}-1)^{-1/2}y^{-2}dy$.
+$$I_n(\theta)=\frac{8n}{\pi}\int_1^0(\frac{1}{y}-1)y^3(-\frac{1}{2})(\frac{1}{y}-1)^{-1/2}y^{-2}dy$$
+$$=\frac{4n}{\pi}\int_0^1y^{1/2}(1-y)^{1/2}dy=\frac{4n}{\pi}\frac{\Gamma(3/2)\Gamma(3/2)}{\Gamma(3)}=\frac{4n}{\pi}\frac{(\frac{1}{2}\pi)^2}{2!}=\frac{n}{2}$$
+
+2. 
+
+Loglikelihood function and plot:
 
 
+```{r}
+set.seed(20180909)
+n<- 10
+theta<- 5
+x<- rcauchy(n, 5, 1)
+loglik<- -n * log(pi) - sum(log(1 + (x-theta)^2))
+plot(theta, loglik)
+```
 
-\end{itemize}
+3.
+
