@@ -41,49 +41,68 @@ plot(theta,sapply(theta,loglik,x),ylab="LogL of Cauchy")
 3.
 
 Iteration:
-```{r echo=T, results='hide'}
+```{r}
 g <- function(theta) sum(2 * (x - theta)/(1 + (x - theta)^2))
 dg <- function(theta) sum((2 * (x - theta)^2 - 2)/(1 + (x - theta)^2)^2)
-newton<- function(fun, dfun, x0, eps, nlim){
-  t<- 0
-  repeat{
-    t<- t+1
-    if(t> nlim){
-      cat("Iteration Limit Exceeded: current=", t, fill=T)
-      x1<- NA
-      break
-    }
-    x1<- x0-fun(x0)/dfun(x0)
-    if (abs(x1 - x0)< eps||fun(x1)<1.0e-12){
-      break
-      x0<- x1
-      cat("Iteration number=",t, "Current interate=",x1, fill = T)
-    }
+newton<- function(fun, dfun, x0, eps, maxit){
+  for (i in 1:maxit) {
+    x1 <- x0 - fun(x0) / dfun(x0)
+    if (abs(x1 - x0) < eps || abs(fun(x1)) < eps){
+      return(NA)
+    } 
+    x0 <- x1
   }
   return(x1)
 }
 
-initial<- -10
-mle<- newton(g, dg, initial, .00001 , 1000)
-for (i in 2:61){
-  initial[i]<- initial[i-1]+.5
-   mle[i]<- newton(g, dg, initial[i], .00001 , 1000)
+init <- seq(-10, 20, by = 0.5)
+sapply(init, function(x) newton(g, dg, x, 1e-6, 1000))
+```
+
+We can see the iteration returns three different results with different initial values.
+
+4.
+```{r}
+f1<- function(theta) sum(2 * (x - theta)/(1 + (x - theta)^2))+ theta
+f2<- function(theta) 0.64 * sum(2 * (x - theta)/(1 + (x - theta)^2))+ theta
+f3<- function(theta) 0.25 * sum(2 * (x - theta)/(1 + (x - theta)^2))+ theta
+
+fixed<- function(fun, x0, eps, maxit){
+  for (i in 1 : maxit){
+    x1<- fun(x0)
+    if (abs(x1-x0)< eps){
+      return(NA)
+    }
+     x0 <- x1
+  }
+  return(x1)
 }
+
+init <- seq(-10, 20, by = 0.5)
+sapply(init, function(x) fixed(f1, x, 1e-6, 1000))
+init <- seq(-10, 20, by = 0.5)
+sapply(init, function(x) fixed(f2, x, 1e-6, 1000))
+init <- seq(-10, 20, by = 0.5)
+sapply(init, function(x) fixed(f3, x, 1e-6, 1000))
+
 ```
 
+5.
 
+```{r}
+g <- function(theta) sum(2 * (x - theta)/(1 + (x - theta)^2))
 
-```{r echo=FALSE}
-dat<- na.omit(cbind(initial, mle))
-c1<- dat[1:9, 1]
-c2<- dat[1:9, 2]
-c3<- dat[10:18, 1]
-c4<- dat[10:18, 2]
-c5<- dat[19:27, 1]
-c6<- dat[19:27, 2]
-knitr::kable(cbind(c1,c2,c3,c4,c5,c6), caption = "MLE of Cauchy by Newton–Raphson method", col.names=c("Initial", "MLE","Initial", "MLE","Initial", "MLE"))
+newtons<- function(fun, x0, eps, maxit){
+  for (i in 1 : maxit){
+    x1<- x0 + 2 * fun(x0)/ length(x)
+    if (abs(x1 - x0)< eps||abs(fun(x1)) < eps){
+      return(NA)
+    }
+    x0 <- x1
+  }
+  return(x1)
+}
+
+init <- seq(-10, 20, by = 0.5)
+sapply(init, function(x) newtons(g, x, 1e-6, 1000))
 ```
-
-Table 1 is the MLE not exceeding iteration number. We can see the iteration returns very different results with different initial values.
-
-
