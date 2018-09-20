@@ -47,19 +47,18 @@ dg <- function(theta) sum((2 * (x - theta)^2 - 2)/(1 + (x - theta)^2)^2)
 newton<- function(fun, dfun, x0, eps, maxit){
   for (i in 1:maxit) {
     x1 <- x0 - fun(x0) / dfun(x0)
-    if (abs(x1 - x0) < eps || abs(fun(x1)) < eps){
-      return(NA)
-    } 
+    if (abs(x1 - x0) < eps || abs(fun(x1)) < eps)
+      return(x1)
     x0 <- x1
   }
-  return(x1)
+  return(NA)
 }
 
 init <- seq(-10, 20, by = 0.5)
 sapply(init, function(x) newton(g, dg, x, 1e-6, 1000))
 ```
 
-We can see the iteration returns three different results with different initial values.
+We can see the iteration returns different results with different initial values.
 
 4.
 ```{r}
@@ -70,12 +69,11 @@ f3<- function(theta) 0.25 * sum(2 * (x - theta)/(1 + (x - theta)^2))+ theta
 fixed<- function(fun, x0, eps, maxit){
   for (i in 1 : maxit){
     x1<- fun(x0)
-    if (abs(x1-x0)< eps){
-      return(NA)
-    }
-     x0 <- x1
+    if (abs(x1-x0)< eps)
+      return(x1)
+    x0 <- x1
   }
-  return(x1)
+  return(NA)
 }
 
 init <- seq(-10, 20, by = 0.5)
@@ -87,6 +85,8 @@ sapply(init, function(x) fixed(f3, x, 1e-6, 1000))
 
 ```
 
+When $\alpha$ is set as 1 and 0.64, the iteration cannot converge. When $\alpha=0.25$, the iteration can return two very close results (5.685421 and 5.68542) with different initial values.
+
 5.
 
 ```{r}
@@ -95,14 +95,26 @@ g <- function(theta) sum(2 * (x - theta)/(1 + (x - theta)^2))
 newtons<- function(fun, x0, eps, maxit){
   for (i in 1 : maxit){
     x1<- x0 + 2 * fun(x0)/ length(x)
-    if (abs(x1 - x0)< eps||abs(fun(x1)) < eps){
-      return(NA)
-    }
+    if (abs(x1 - x0) < eps || abs(fun(x1)) < eps)
+      return(x1)
     x0 <- x1
   }
-  return(x1)
+  return(NA)
 }
 
 init <- seq(-10, 20, by = 0.5)
 sapply(init, function(x) newtons(g, x, 1e-6, 1000))
 ```
+
+Iteration returns same result (5.68542) with different initial values except only one 5.68541 which is very close to the others.
+
+6.
+
+For such special distribution as Cauchy, Newton–Raphson method shows variety of estimate of MLE. With some initial values, this method does not converge. With some initial values, this method returns very different estimate of MLE.
+
+When using fixed point mehtod, scaling choices of $\alpha$ is important. Some $\alpha$ cannot return converged result. For the $\alpha$'s which can return convergence, they give us very similar estimate of MLE with different initial values. 
+
+When using Fisher scoring and refining the estimate by running Newton-Raphson method, this method returns the same result with different initial values.
+
+The speed of these three iterations are similar.
+I think Newton-Raphson with Fisher scoring is the most stable one among these three method.
