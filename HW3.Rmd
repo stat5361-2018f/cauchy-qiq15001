@@ -54,7 +54,7 @@ newton<- function(fun, dfun, x0, eps, maxit){
   return(NA)
 }
 
-init <- seq(-10, 20, by = 0.5)
+init <- seq(-10, 30, by = 0.5)
 sapply(init, function(x) newton(g, dg, x, 1e-6, 1000))
 ```
 
@@ -76,11 +76,11 @@ fixed<- function(fun, x0, eps, maxit){
   return(NA)
 }
 
-init <- seq(-10, 20, by = 0.5)
+init <- seq(-10, 30, by = 0.5)
 sapply(init, function(x) fixed(f1, x, 1e-6, 1000))
-init <- seq(-10, 20, by = 0.5)
+init <- seq(-10, 30, by = 0.5)
 sapply(init, function(x) fixed(f2, x, 1e-6, 1000))
-init <- seq(-10, 20, by = 0.5)
+init <- seq(-10, 30, by = 0.5)
 sapply(init, function(x) fixed(f3, x, 1e-6, 1000))
 
 ```
@@ -102,7 +102,7 @@ newtons<- function(fun, x0, eps, maxit){
   return(NA)
 }
 
-init <- seq(-10, 20, by = 0.5)
+init <- seq(-10, 30, by = 0.5)
 sapply(init, function(x) newtons(g, x, 1e-6, 1000))
 ```
 
